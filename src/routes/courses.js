@@ -4,7 +4,7 @@ const router = express.Router();
 const mysqlConnection = require('../database');
 
 router.get('/', (req, res, next) => {
-  mysqlConnection.query('SELECT * FROM courses', (err, rows, fields) => {
+  mysqlConnection.query('SELECT c.*, s.status_description FROM courses AS c INNER JOIN status AS s ON c.status_id = s.status_id', (err, rows, fields) => {
     if (!err) {
       res.json(rows);
     } else {
@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/:courses_id', (req, res, next) => {
   const { courses_id } = req.params;
-  mysqlConnection.query('SELECT * FROM courses WHERE courses_id = ?', [courses_id], (err, rows, fields) => {
+  mysqlConnection.query('SELECT c.*, s.status_description FROM courses AS c INNER JOIN status AS s ON c.status_id = s.status_id WHERE c.courses_id = ?', [courses_id], (err, rows, fields) => {
     if (!err) {
       res.json(rows[0]);
     } else {
